@@ -8,7 +8,7 @@ import REACT2 from '../../img/react/alfworld.png'
 
 [Yao et al., 2022](https://arxiv.org/abs/2210.03629) introduced a framework named ReAct where LLMs are used to generate both *reasoning traces* and *task-specific actions* in an interleaved manner. 
 
-Generating reasoning traces allow the model to induce, track, and update action plans, and even handle exceptions. The action step allows to interface with and gather information from external sources such as knowledge bases or environments.
+Generating reasoning traces allows the model to induce, track, and update action plans, and even handle exceptions. The action step allows to interface with and gather information from external sources such as knowledge bases or environments.
 
 The ReAct framework can allow LLMs to interact with external tools to retrieve additional information that leads to more reliable and factual responses.
 
@@ -19,7 +19,7 @@ Results show that ReAct can outperform several state-of-the-art baselines on lan
 
 ReAct is inspired by the synergies between "acting" and "reasoning" which allow humans to learn new tasks and make decisions or reasoning. 
 
-Chain-of-thought (CoT) prompting has shown the capabilities of LLMs to carry out reasoning traces to generate answers to questions involving arithmetic and commonsense reasoning, among other tasks [(Wei et al., 2022)](https://arxiv.org/abs/2201.11903). But it's lack of access to the external world or inability to update its knowledge can lead to issues like fact hallucination and error propagation. 
+Chain-of-thought (CoT) prompting has shown the capabilities of LLMs to carry out reasoning traces to generate answers to questions involving arithmetic and commonsense reasoning, among other tasks [(Wei et al., 2022)](https://arxiv.org/abs/2201.11903). But the lack of access to the external world or inability to update its knowledge can lead to issues like fact hallucination and error propagation. 
 
 ReAct is a general paradigm that combines reasoning and acting with LLMs. ReAct prompts LLMs to generate verbal reasoning traces and actions for a task. This allows the system to perform dynamic reasoning to create, maintain, and adjust plans for acting while also enabling interaction to external environments (e.g., Wikipedia) to incorporate additional information into the reasoning. The figure below shows an example of ReAct and the different steps involved to perform question answering.
 
@@ -39,7 +39,7 @@ To demonstrate how ReAct prompting works, let's follow an example from the paper
 
 The first step is to select cases from a training set (e.g., HotPotQA) and compose ReAct-format trajectories. These are used as few-shot exemplars in the prompts. The trajectories consist of multiple thought-action-observation steps as shown in the figure above. The free-form thoughts are used to achieve different tasks such as decomposing questions, extracting information, performing commonsense/arithmetic reasoning, guide search formulation, and synthesizing final answer. 
 
-Here is an example of what the ReAct prompt exemplars look like (obtained from the paper and shortened to one example for simplicity): 
+Here is an example of what the ReAct prompt exemplars looks like (obtained from the paper and shortened to one example for simplicity): 
 
 ```
 Question What is the elevation range for the area that the eastern sector of the
@@ -127,7 +127,7 @@ load_dotenv()
 
 # load API keys; you will need to obtain these if you haven't yet
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-os.environ["SERPAPI_API_KEY"] = os.getenv("SERPAPI_API_KEY")
+os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
 
 ```
 
@@ -135,7 +135,7 @@ Now we can configure the LLM, the tools we will use, and the agent that allows u
 
 ``` python
 llm = OpenAI(model_name="text-davinci-003" ,temperature=0)
-tools = load_tools(["serpapi", "llm-math"], llm=llm)
+tools = load_tools(["google-serper", "llm-math"], llm=llm)
 agent = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True)
 ```
 
@@ -174,6 +174,6 @@ The output we get is as follows:
 "Harry Styles, Olivia Wilde's boyfriend, is 29 years old and his age raised to the 0.23 power is 2.169459462491557."
 ```
 
-We adapted the example from the [LangChain documentation](https://python.langchain.com/en/latest/modules/agents/getting_started.html), so credit goes to them. We encourage the learner to explore different combination of tools and tasks. 
+We adapted the example from the [LangChain documentation](https://python.langchain.com/docs/modules/agents/agent_types/react), so credit goes to them. We encourage the learner to explore different combination of tools and tasks. 
 
 You can find the notebook for this code here: https://github.com/dair-ai/Prompt-Engineering-Guide/blob/main/notebooks/react.ipynb
